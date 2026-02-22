@@ -34,8 +34,16 @@ fi
 GATEWAY=$(ip route | grep default | awk '{print $3}' | head -n 1)
 GATEWAY=${GATEWAY:-172.18.0.1}
 
-echo "Applying Routing fix for LAN: $VPN_LAN_NETWORK via $GATEWAY"
-ip route add "$VPN_LAN_NETWORK" via "$GATEWAY" dev eth0 || true
+echo "Applying Routing fix for LAN(s): $VPN_LAN_NETWORK via $GATEWAY"
+IFS=',' read -ra SUBNETS <<< "$VPN_LAN_NETWORK"
+for SUBNET in "${SUBNETS[@]}"; do
+    # Trim whitespace just in case
+    SUBNET=$(echo "$SUBNET" | xargs)
+    if [ -n "$SUBNET" ]; then
+        echo "Adding route for $SUBNET"
+        ip route add "$SUBNET" via "$GATEWAY" dev eth0 || echo "Failed to add route for $SUBNET (may already exist)"
+    fi
+done
 
 # 4. Setup MAM session update cron (every 10 minutes)
 echo "Setting up MAM session cron..."

@@ -31,8 +31,10 @@ if [ ! -f "$COOKIEFILE" ] && [ -z "$MAM_ID_TO_USE" ]; then
     echo "----------------------------------------------------------------------"
     echo "BOOTSTRAP REQUIRED:"
     echo "1. Current VPN IP: $CURRENT_IP"
-    echo "2. Go to MAM > Profiles > Security and generate a MAM_ID for this IP."
-    echo "3. Run: docker compose exec qbittorrent mam-update YOUR_MAM_ID"
+    echo "2. Go to myanonamouse.net > User Preferences > Security > Create Session"
+    echo "3. Enter IP: $CURRENT_IP"
+    echo "4. Check 'ASN-locked' and set 'Allow session to set dynamic seedbox' to 'Yes'"
+    echo "5. Run: docker compose exec qbittorrent mam-update YOUR_MAM_ID"
     echo "----------------------------------------------------------------------"
     exit 0
 fi

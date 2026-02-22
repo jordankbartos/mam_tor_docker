@@ -16,6 +16,7 @@ Copy the example environment file and fill in your details:
 cp .env.example .env
 nano .env
 ```
+> **Note:** If you access your network via VPN (e.g., PiVPN/WireGuard), add your VPN client subnet to `LAN_NETWORK` (comma-separated, e.g., `192.168.1.0/24,10.6.0.0/24`) to ensure routing works correctly.
 
 ### 2. Configure qBittorrent (Optional)
 If this is a fresh install, you can use the provided distribution config:
@@ -35,7 +36,12 @@ The MAM session must be initialized while the container is running to ensure the
    ```bash
    docker compose exec qbittorrent curl -s ip4.me/api/
    ```
-2. **Generate MAM_ID:** Go to MyAnonamouse > Profiles > Security, enter the IP above, and generate a `MAM_ID`.
+2. **Generate MAM_ID:**
+   - Go to myanonamouse.net > User Preferences > Security > Create Session.
+   - Enter the IP from step 1.
+   - Check **ASN-locked**.
+   - Set **"Allow session to set dynamic seedbox"** to **Yes**.
+   - Click "Create" to generate your `MAM_ID`.
 3. **Initialize Session:**
    ```bash
    docker compose exec qbittorrent mam-update YOUR_MAM_ID
