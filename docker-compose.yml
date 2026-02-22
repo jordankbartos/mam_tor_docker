@@ -40,7 +40,7 @@ services:
       - ${DOWNLOADS_PATH}:/data/tor
       # Logic & Scripts
       - ./scripts/network-fix.sh:/etc/s6-overlay/init-hook-app:ro
-      - ./scripts/mam_session_id.sh:/usr/local/bin/mam-update:ro
+      - ./scripts/mam_update.py:/usr/local/bin/mam-update:ro
       - ./templates/wg0.conf.template:/templates/wg0.conf.template:ro
     ports:
       - 60202:8080

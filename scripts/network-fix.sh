@@ -52,7 +52,7 @@ if [ -f "$MAM_SCRIPT" ]; then
     chmod +x "$MAM_SCRIPT"
     # Add to crontab if not already there
     if ! crontab -l 2>/dev/null | grep -q "mam-update"; then
-        (crontab -l 2>/dev/null; echo "*/10 * * * * $MAM_SCRIPT >> /config/mam_config/mam.log 2>&1") | crontab -
+        (crontab -l 2>/dev/null; echo "*/10 * * * * $MAM_SCRIPT > /dev/null 2>&1") | crontab -
         echo "Cron job added."
     fi
     # Start crond if not running
@@ -60,7 +60,7 @@ if [ -f "$MAM_SCRIPT" ]; then
 
     # Run once immediately in background
     echo "Running initial MAM update..."
-    "$MAM_SCRIPT" >> /config/mam_config/mam.log 2>&1 &
+    "$MAM_SCRIPT" > /dev/null 2>&1 &
 else
     echo "Warning: MAM script not found at $MAM_SCRIPT"
 fi
