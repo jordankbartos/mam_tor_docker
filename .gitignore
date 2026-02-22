@@ -1,1 +1,24 @@
-**/BT_backup/*
+# Environment variables
+.env
+
+# Container State (Ignored entirely)
+config/
+
+# Local backups
+*.bak*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+.test_venv/
+env/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

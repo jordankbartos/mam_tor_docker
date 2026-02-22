@@ -1,0 +1,12 @@
+[Interface]
+Address = ${WG_ADDRESS}
+PrivateKey = ${WG_PRIVATE_KEY}
+MTU = ${WG_MTU}
+DNS = ${WG_DNS}
+
+[Peer]
+PublicKey = ${WG_PEER_PUBLIC_KEY}
+PresharedKey = ${WG_PEER_PRESHARED_KEY}
+Endpoint = ${WG_PEER_ENDPOINT}
+AllowedIPs = 0.0.0.0/0,::/0
+PersistentKeepalive = 15

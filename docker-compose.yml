@@ -1,0 +1,47 @@
+services:
+  qbittorrent:
+    image: ghcr.io/hotio/qbittorrent
+    platform: linux/arm64
+    container_name: qbittorrent
+    # Using privileged: true is necessary on Pi for wg0 and routing table mods
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - PUID=${PUID:-1000}
+      - PGID=${PGID:-1000}
+      - TZ=${TZ:-America/Detroit}
+      - UMASK=${UMASK:-002}
+      # VPN Configuration
+      - VPN_ENABLED=yes
+      - VPN_PROVIDER=generic
+      - VPN_CONF=wg0
+      - VPN_LAN_NETWORK=${LAN_NETWORK}
+      - VPN_LAN_LEAK_ENABLED=true
+      - VPN_EXPOSE_PORTS_ON_LAN=8080
+      - WEBUI_AUTH_SUBNET=${LAN_NETWORK}
+      - NAME_SERVERS=1.1.1.1,1.0.0.1
+      - STRICT_PORT_FORWARDING=yes
+      # WireGuard Variables (used by network-fix.sh)
+      - WG_ADDRESS=${WG_ADDRESS}
+      - WG_PRIVATE_KEY=${WG_PRIVATE_KEY}
+      - WG_MTU=${WG_MTU:-1320}
+      - WG_DNS=${WG_DNS}
+      - WG_PEER_PUBLIC_KEY=${WG_PEER_PUBLIC_KEY}
+      - WG_PEER_PRESHARED_KEY=${WG_PEER_PRESHARED_KEY}
+      - WG_PEER_ENDPOINT=${WG_PEER_ENDPOINT}
+    volumes:
+      - ${CONFIG_PATH:-./config}:/config
+      - ${DOWNLOADS_PATH}:/data/tor
+      # Logic & Scripts
+      - ./scripts/network-fix.sh:/etc/s6-overlay/init-hook-app:ro
+      - ./scripts/mam_session_id.sh:/usr/local/bin/mam-update:ro
+      - ./templates/wg0.conf.template:/templates/wg0.conf.template:ro
+    ports:
+      - 60202:8080
+    restart: unless-stopped
